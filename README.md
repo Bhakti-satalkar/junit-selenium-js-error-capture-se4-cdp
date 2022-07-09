@@ -102,6 +102,24 @@ DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("name", "Selenium 4 Test");
         capabilities.setCapability("plugin", "git-junit");
 ```
+### Capturing and printing JS exceptions:
+
+```java
+        DevTools devTools = ((HasDevTools) driver).getDevTools();
+        devTools.createSession();
+
+        List<JavascriptException> jsExceptionsList = new ArrayList<>();
+        Consumer<JavascriptException> addEntry = jsExceptionsList::add;
+        devTools.getDomains().events().addJavascriptExceptionListener(addEntry);
+
+        //print
+        for (JavascriptException jsException : jsExceptionsList) {
+            System.out.println("My JS exception message: " + jsException.getMessage());
+            System.out.println("My JS exception system: " + jsException.getSystemInformation());
+            jsException.printStackTrace();
+            success = true;
+        }
+```
 
 ### Executing the Test
 
